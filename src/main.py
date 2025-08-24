@@ -1,19 +1,30 @@
 import pandas as pd
-from strategy import MovingAverageStrategy
 from risk_manager import RiskManager
-from portfolio import Portfolio
 from backtest import Backtest
+from strategy import MovingAverageStrategy, RSI_MomentumStrategy, MeanReversionStrategy
 
-def main():
-    strategy = MovingAverageStrategy()
+STRATEGIES = {
+    "moving_average": MovingAverageStrategy,
+    "rsi": RSI_MomentumStrategy,
+    "mean_reversion": MeanReversionStrategy
+}
+
+def main(strategy_name="moving_average"):
+    StrategyClass = STRATEGIES.get(strategy_name.lower())
+    if not StrategyClass:
+        raise ValueError(f"Strategy '{strategy_name}' not found. Choose from: {list(STRATEGIES.keys())}")
+
+    strategy = StrategyClass()
     data = strategy.generate_signals()
 
     rm = RiskManager(max_position=0.1)
-    pf = Portfolio(initial_capital=100000)
-    data = pf.calculate(data, rm)
+    data["position"] = data["signal"].apply(lambda x: rm.apply_risk(x))
+    data["returns"] = data["close"].pct_change() * data["position"]
+    data["portfoliovalue"] = (1 + data["returns"].fillna(0)).cumprod() * 100000
 
     print(data.tail())
     Backtest(data).plot_results()
 
+
 if __name__ == "__main__":
-    main()
+    main(strategy_name="rsi")

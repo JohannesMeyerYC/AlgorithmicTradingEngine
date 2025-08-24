@@ -8,9 +8,11 @@ class Backtest:
     def plot_results(self):
         plt.figure(figsize=(12, 6))
         plt.plot(self.data["close"], label="Close Price")
-        plt.plot(self.data["sma20"], label="SMA20")
-        plt.plot(self.data["sma50"], label="SMA50")
-        plt.plot(self.data["portfoliovalue"], label="Portfolio Value")
+
+        for col in ["sma20", "sma50", "portfoliovalue"]:
+            if col in self.data.columns:
+                plt.plot(self.data[col], label=col.capitalize())
+
         plt.legend()
         plt.title("Backtest Results")
         tmp_file = "backtest_demo.png"
