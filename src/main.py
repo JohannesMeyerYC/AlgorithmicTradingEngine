@@ -14,16 +14,25 @@ def main(strategy_name="moving_average"):
     if not StrategyClass:
         raise ValueError(f"Strategy '{strategy_name}' not found. Choose from: {list(STRATEGIES.keys())}")
 
-    strategy = StrategyClass()
-    data = strategy.generate_signals()
-
+    symbols = ["AAPL", "MSFT", "GOOG"]  # Add your assets here
     rm = RiskManager(max_position=0.1)
-    data["position"] = data["signal"].apply(lambda x: rm.apply_risk(x))
-    data["returns"] = data["close"].pct_change() * data["position"]
-    data["portfoliovalue"] = (1 + data["returns"].fillna(0)).cumprod() * 100000
+    data_dict = {}
 
-    print(data.tail())
-    Backtest(data).plot_results()
+    for symbol in symbols:
+        strategy = StrategyClass(symbol=symbol)
+        data = strategy.generate_signals()
+        data["position"] = data["signal"].apply(lambda x: rm.apply_risk(x))
+        data["returns"] = data["close"].pct_change() * data["position"]
+        data["portfoliovalue"] = (1 + data["returns"].fillna(0)).cumprod() * 100000
+        data_dict[symbol] = data
+
+    # Print the last few rows of each asset
+    for symbol, df in data_dict.items():
+        print(f"\n=== {symbol} ===")
+        print(df.tail())
+
+    Backtest(data_dict).plot_results()
+
 
 
 if __name__ == "__main__":
