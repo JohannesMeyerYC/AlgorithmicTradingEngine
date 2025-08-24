@@ -17,7 +17,7 @@ A modular Python framework for building, backtesting, and running algorithmic tr
 2. Navigate to the project folder
 3. Install dependencies
 
-Usage
+## Usage
 
 Configure API keys and strategy parameters in config.py.
 Run backtests or live trading using:
@@ -28,21 +28,17 @@ Add new strategies directly in src/strategy.py or as separate modules.
 Logs are stored in logs/, and historical data is stored in data/historical/.
 
 Project Structure:
-project_root/
-├─ src/             # Main source code
-├─ tests/           # Unit tests
-├─ logs/            # Trade and system logs
-├─ data/            # Historical and live market data
-├─ config.py        # API keys and parameters
-├─ requirements.txt # Dependencies
-├─ README.md        # This file
+- project_root/
+- ├─ src/             # Main source code
+- ├─ tests/           # Unit tests
+- ├─ logs/            # Trade and system logs
+- ├─ data/            # Historical and live market data
+- ├─ config.py        # API keys and parameters
+- ├─ requirements.txt # Dependencies
+- ├─ README.md        # This file
 
-Contributing:
+## Contributing:
 
-Follow modular design when adding features.
-Keep code readable and well-documented.
-Add unit tests for new modules in tests/.
-
-
-This includes a **directory overview**, usage instructions, and all sections in one file. It is clean and professional without emojis or dashes.  
-I can also add a **small example snippet** of running a backtest for clarity if you want. Do you want me to add that?
+- Follow modular design when adding features.
+- Keep code readable and well-documented.
+- Add unit tests for new modules in tests/.
