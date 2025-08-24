@@ -98,3 +98,22 @@ def summary_stats(returns):
         "Annualized Volatility": annualized_volatility(returns),
         "Cumulative Return": cumulative_returns(returns).iloc[-1] - 1
     }
+
+class CostModel:
+    def __init__(self, fixed_fee=0.0, proportional_fee=0.001, slippage=0.0005):
+        """
+        fixed_fee: flat cost per trade
+        proportional_fee: % of trade value
+        slippage: expected price movement due to order execution
+        """
+        self.fixed_fee = fixed_fee
+        self.proportional_fee = proportional_fee
+        self.slippage = slippage
+
+    def apply_cost(self, price, position_change):
+        """
+        position_change: number of shares traded (positive or negative)
+        """
+        trade_value = abs(position_change) * price
+        cost = self.fixed_fee + trade_value * (self.proportional_fee + self.slippage)
+        return cost
